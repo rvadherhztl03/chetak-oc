@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ordercloud/catalyst": "^1.2.0",
+    "@paypal/react-paypal-js": "^8.8.3",
     "@reduxjs/toolkit": "^1.9.5",
     "@tailwindcss/postcss": "^4.1.7",
     "axios": "^1.2.0",
