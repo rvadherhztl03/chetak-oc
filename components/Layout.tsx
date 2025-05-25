@@ -3,6 +3,7 @@ import { FunctionComponent, useState } from 'react'
 import { Poppins } from '@next/font/google'
 import TestRideForm from './TestRideForm'
 import Header from './Header'
+import Footer from './Footer'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -27,10 +28,13 @@ const Layout: FunctionComponent = ({ children }) => {
         <link rel="icon" href="https://cdn.bajajauto.com/rev-images/urbanite/favicon.ico" />
       </Head>
 
-      <div className={poppins?.className}>
+      <div className={`${poppins?.className} min-h-screen flex flex-col`}>
         <Header onTestRideClick={handleTestRideClick} />
-        <main>{children}</main>
+        <main className="">{children}</main>
         <TestRideForm isOpen={isTestRideFormOpen} onClose={handleCloseTestRideForm} />
+        <footer className="mt-auto">
+          <Footer />
+        </footer>
       </div>
     </>
   )

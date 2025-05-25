@@ -7,7 +7,6 @@ import OcProductDetail from '../../../ordercloud/components/OcProductDetail'
 const ProductPage: FunctionComponent = () => {
   const { isReady, query } = useRouter()
 
-  console.log('@@query.productId', query.productId)
   const productName = useOcSelector(
     (s) => s.ocProductDetail.product && s.ocProductDetail.product.Name
   )

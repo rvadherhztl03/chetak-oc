@@ -2,7 +2,6 @@ import { BuyerProduct } from 'ordercloud-javascript-sdk'
 import { FunctionComponent } from 'react'
 import useOcProductList from '../../hooks/useOcProductList'
 import { OcProductListOptions } from '../../redux/ocProductList'
-import OcProductCard from '../OcProductCard'
 import Image from 'next/image'
 import Link from 'next/dist/client/link'
 
@@ -11,7 +10,7 @@ export interface OcProductListProps {
   renderItem?: (product: BuyerProduct) => JSX.Element
 }
 
-const OcProductList: FunctionComponent<OcProductListProps> = ({ options, renderItem }) => {
+const OcProductList: FunctionComponent<OcProductListProps> = ({ options }) => {
   const products = useOcProductList(options)
 
   return (
