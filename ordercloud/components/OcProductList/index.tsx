@@ -47,7 +47,7 @@ const OcProductList: FunctionComponent<OcProductListProps> = ({ options, renderI
                       height={500}
                     />
                   </li> */}
-                      <Image src="/images/b1.webp" height={400} width={600} />
+                      <Image alt={p?.Name} src="/images/b1.webp" height={400} width={600} />
                     </div>
                   </li>
                 </Link>
