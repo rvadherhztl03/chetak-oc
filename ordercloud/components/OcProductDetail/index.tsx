@@ -20,39 +20,41 @@ const OcProductDetail: FunctionComponent<OcProductDetailProps> = ({ productId })
   const [isTestRideFormOpen, setIsTestRideFormOpen] = useState(false)
 
   return product ? (
-    <div className="relative w-full h-[60vh]">
-      {product?.xp?.AdditionalImages && (
-        <ImageHelper
-          url={product?.xp?.AdditionalImages?.BackgroundImage}
-          className="object-cover w-full h-full object-cover"
-          pictureClasses="h-full w-full"
-        />
-      )}
-      {/* Overlay container for text and buttons */}
-      <div className="absolute bottom-10 left-[5%] text-white">
-        <h1 className="text-4xl font-medium mb-4">{'The Best Chetak Yet'}</h1>
-        <div className="bg-white p-8 rounded-lg text-gray-800">
-          <p className="text-lg mb-2">The new chetak {product?.Name}, starting from</p>
-          {/* Assuming price is in product.PriceSchedule.PriceBreaks[0].Price and Name is available */}
-          <div className="flex items-baseline justify-center text-2xl font-semibold mb-4">
-            <span>{formatPrice(product?.PriceSchedule?.PriceBreaks[0]?.Price)}/-</span>
-            <span className="ml-2 text-sm font-normal">
-              or {(Number(product?.PriceSchedule?.PriceBreaks[0]?.Price) / 48)?.toFixed(2)}/m*
-            </span>
-          </div>
-          <div className="flex flex-col lg:flex-row items-center gap-4">
-            <button
-              className="border w-full border-gray-300 px-6 py-2 rounded-full"
-              onClick={() => setIsTestRideFormOpen(true)}
-            >
-              Test Ride
-            </button>
-            <Link
-              href={'/booking'}
-              className="bg-gradient-to-b w-full text-center from-[#95e9f1] to-[#47bcc8] text-[#322b54] px-6 py-2 rounded-full"
-            >
-              Book Now
-            </Link>
+    <div>
+      <div className="relative w-full h-[60vh]">
+        {product?.xp?.AdditionalImages && (
+          <ImageHelper
+            url={product?.xp?.AdditionalImages?.BackgroundImage}
+            className="object-cover w-full h-full object-cover"
+            pictureClasses="h-full w-full"
+          />
+        )}
+        {/* Overlay container for text and buttons */}
+        <div className="absolute bottom-10 left-[5%] text-white">
+          <h1 className="text-4xl font-medium mb-4">{'The Best Chetak Yet'}</h1>
+          <div className="bg-white p-8 rounded-lg text-gray-800">
+            <p className="text-lg mb-2">The new chetak {product?.Name}, starting from</p>
+            {/* Assuming price is in product.PriceSchedule.PriceBreaks[0].Price and Name is available */}
+            <div className="flex items-baseline justify-center text-2xl font-semibold mb-4">
+              <span>{formatPrice(product?.PriceSchedule?.PriceBreaks[0]?.Price)}/-</span>
+              <span className="ml-2 text-sm font-normal">
+                or {(Number(product?.PriceSchedule?.PriceBreaks[0]?.Price) / 48)?.toFixed(2)}/m*
+              </span>
+            </div>
+            <div className="flex flex-col lg:flex-row items-center gap-4">
+              <button
+                className="border w-full border-gray-300 px-6 py-2 rounded-full"
+                onClick={() => setIsTestRideFormOpen(true)}
+              >
+                Test Ride
+              </button>
+              <Link
+                href={'/booking'}
+                className="bg-gradient-to-b w-full text-center from-[#95e9f1] to-[#47bcc8] text-[#322b54] px-6 py-2 rounded-full"
+              >
+                Book Now
+              </Link>
+            </div>
           </div>
         </div>
       </div>

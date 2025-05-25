@@ -91,7 +91,7 @@ const Footer = () => {
   )
 
   return (
-    <footer className="bg-[#322b54] text-white py-8 px-4 mt-auto w-full">
+    <section className="bg-[#322b54] text-white py-8 px-4 mt-auto w-full">
       <div className="container mx-auto">
         {/* Desktop View */}
         <div className="hidden md:flex justify-between mb-8">
@@ -177,7 +177,7 @@ const Footer = () => {
           2025 ©Copyright. All Rights Reserved.
         </div>
       </div>
-    </footer>
+    </section>
   )
 }
 
