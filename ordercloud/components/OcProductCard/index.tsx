@@ -1,15 +1,12 @@
-/* eslint-disable import/no-unresolved */
 import { BuyerProduct } from 'ordercloud-javascript-sdk'
 import { FunctionComponent } from 'react'
 import Image from 'next/image'
-import HoverImage from '../../../helper/HoverImage'
 
 interface OcProductCardProps {
   product: BuyerProduct
 }
 
 const OcProductCard: FunctionComponent<OcProductCardProps> = ({ product }) => {
-  const fieldsProps = product
   return (
     <div className=" border-red-300 w-full h-full hover:bg-stone-200 hover:shadow-stone-500/50 shadow-md z-10 productCard">
       <div className="image-container">

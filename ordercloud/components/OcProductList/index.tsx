@@ -1,76 +1,104 @@
-import { BuyerProduct } from 'ordercloud-javascript-sdk'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useState } from 'react'
 import useOcProductList from '../../hooks/useOcProductList'
 import { OcProductListOptions } from '../../redux/ocProductList'
-import Image from 'next/image'
-import Link from 'next/dist/client/link'
+import { ChevronRight } from 'lucide-react'
+import { ChetakProduct } from '../../../components/Header'
+import ImageHelper from '../../../helper/Image'
+import formatPrice from '../../utils/formatPrice'
+import Link from 'next/link'
+import { ProductHero } from '../OcProductDetail'
+import TestRideForm from '../../../components/TestRideForm'
 
 export interface OcProductListProps {
   options?: OcProductListOptions
-  renderItem?: (product: BuyerProduct) => JSX.Element
+  renderItem?: (product: ChetakProduct) => JSX.Element
 }
 
 const OcProductList: FunctionComponent<OcProductListProps> = ({ options }) => {
   const products = useOcProductList(options)
+  const [isTestRideFormOpen, setIsTestRideFormOpen] = useState(false)
 
   return (
     <>
       {products && (
-        <>
-          {/* <Image 
-          src="https://images.unsplash.com/photo-1507914766763-ad9f71098f89?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1973&q=80" 
-          alt="Product page"
-          layout="fill"
-          className="w-full h-screen object-cover"
-          unoptimized
-          priority 
-          /> */}
-          <ol className="my-10 grid gap-3 container mx-auto md:grid-cols-2 lg:grid-cols-2">
-            {products &&
-              products.map((p) => (
-                <Link key={p.ID} href={`/products/${p.ID}`}>
-                  <li className="">
-                    <div className="card bg-[#eff5f7] flex rounded-r-lg">
-                      <div className="p-4">
-                        <p className="">{p.Name}</p>
-                      </div>
-                      {/* <li
-                    key={p.ID}
-                    className="bg-[#526464] mx-4 mb-4 md:w-200px md:max-w-[360px] z-10"
-                  >
-                    <Image
-                      className="object-cover hover:scale-125 transform transition-all duration-300"
-                      src={p?.xp?.ImageUrl}
-                      alt="sd"
-                      width={800}
-                      height={500}
-                    />
-                  </li> */}
-                      <Image alt={p?.Name} src="/images/b1.webp" height={400} width={600} />
-                    </div>
-                  </li>
-                </Link>
-              ))}
-          </ol>
-        </>
-      )}
-
-      {!products && (
-        <>
-          <Image
-            src="/images/emptyCart.jpg"
-            alt="Product page"
-            layout="fill"
-            className="w-full h-screen object-cover"
-            unoptimized
-            priority
+        <div>
+          <ProductHero
+            product={products?.[0] as ChetakProduct}
+            onTestRideClick={() => setIsTestRideFormOpen(true)}
+            headLine="Lifeproof build. Futureproof tech."
           />
-          <div className="m-10 bg-stone-100 text-center p-4 ">
-            <p>No listed products found!</p>
+          <div className=" bg-white py-12 bg-gradient-to-br from-cyan-50 via-blue-50 to-indigo-50">
+            <div className="mx-auto px-4 sm:px-6 lg:px-8">
+              <h1 className="text-center text-3xl">
+                See All <span className="text-[#2a939d]">Models</span>
+              </h1>
+              {/* Product Grid - 2 columns on desktop, 1 on mobile */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 px-12 mx-auto items-center justify-center">
+                {products.map((product, index) => {
+                  const isLastItem = index === products.length - 1
+                  const isOddTotal = products.length % 2 !== 0
+                  const shouldCenter = isLastItem && isOddTotal
+
+                  return (
+                    <div
+                      key={product.ID}
+                      className={`${shouldCenter ? 'lg:col-span-2 lg:flex lg:justify-center' : ''}`}
+                    >
+                      <ProductCard product={product as ChetakProduct} shouldCenter={shouldCenter} />
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
           </div>
-        </>
+          <TestRideForm isOpen={isTestRideFormOpen} onClose={() => setIsTestRideFormOpen(false)} />
+        </div>
       )}
     </>
+  )
+}
+
+const ProductCard: React.FC<{ product: ChetakProduct; shouldCenter: boolean }> = ({
+  product,
+  shouldCenter,
+}) => {
+  const price = product.PriceSchedule.PriceBreaks[0]?.Price || 0
+  const monthlyEmi = Math.round(price / 36) // Assuming 36 month EMI
+
+  return (
+    <div className={`rounded-3xl p-8 text-center ${shouldCenter && 'lg:w-1/2'}`}>
+      {/* Product Image */}
+      <div className="mb-8 flex justify-center items-center ">
+        <ImageHelper
+          url={product.xp.Images[1]?.Url}
+          alt={`Chetak ${product.Name}`}
+          className="max-w-full max-h-full object-contain filter drop-shadow-lg"
+        />
+      </div>
+
+      {/* Starting from text */}
+      <div className="text-gray-600 text-lg mb-2">Starting from</div>
+
+      {/* Price */}
+      <div></div>
+      <div className="mb-2">
+        <span className="text-3xl font-medium text-gray-900 ml-1">{formatPrice(price)}/-*</span>
+      </div>
+
+      {/* EMI text */}
+      <div className="text-gray-600 text-base mb-8">
+        or ₹{monthlyEmi.toLocaleString('en-IN')}/month**
+      </div>
+
+      {/* Know more button */}
+      <Link
+        href={`/Chetak_Series_35/${product?.ID}`}
+        className="w-full  bg-transparent border border-gray-300 text-gray-700 py-4 px-8 rounded-full font-medium hover:border-gray-400 hover:shadow-sm transition-all duration-200 flex items-center justify-center gap-2 mx-auto"
+      >
+        Know more
+        <ChevronRight size={20} />
+      </Link>
+    </div>
   )
 }
 

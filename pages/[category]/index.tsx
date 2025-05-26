@@ -6,6 +6,7 @@ import OcProductCard from '../../ordercloud/components/OcProductCard'
 import OcProductList from '../../ordercloud/components/OcProductList'
 import useNextRouterMapping, { NextQueryMap } from '../../ordercloud/hooks/useNextRouterMapping'
 import ClientOnly from '../../helper/ClientOnly'
+import { ChetakProduct } from '../../components/Header'
 
 const queryMap: NextQueryMap = {
   search: 's',
@@ -39,10 +40,10 @@ const CategoryListPage: FunctionComponent = () => {
   const { category } = router.query
   const { options } = useNextRouterMapping(queryMap)
 
-  const handleRenderItem = (p: BuyerProduct) => {
+  const handleRenderItem = (p: ChetakProduct) => {
     return (
       <Link href={`/${category}/${p.ID}`}>
-        <OcProductCard product={p} />
+        <OcProductCard product={p as BuyerProduct} />
       </Link>
     )
   }

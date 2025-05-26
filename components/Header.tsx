@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import ImageHelper from '../helper/Image'
-import { FunctionComponent, useState, useEffect } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { FunctionComponent, useState, useEffect, useRef } from 'react'
+import { ChevronDown, Menu, X } from 'lucide-react'
 import { useOcSelector } from '../ordercloud/redux/ocStore'
 
 interface HeaderProps {
@@ -9,29 +9,29 @@ interface HeaderProps {
 }
 
 interface PriceBreak {
-  Quantity: number
-  Price: number
-  SalePrice: number | null
-  SubscriptionPrice: number | null
-  BundlePrice: number | null
+  Quantity?: number
+  Price?: number
+  SalePrice?: number | null
+  SubscriptionPrice?: number | null
+  BundlePrice?: number | null
 }
 
 interface PriceSchedule {
-  OwnerID: string
-  ID: string
-  Name: string
-  ApplyTax: boolean
-  ApplyShipping: boolean
-  MinQuantity: number
-  MaxQuantity: number | null
-  UseCumulativeQuantity: boolean
-  RestrictedQuantity: boolean
-  PriceBreaks: PriceBreak[]
-  Currency: string | null
-  SaleStart: string | null
-  SaleEnd: string | null
-  IsOnSale: boolean
-  xp: null
+  OwnerID?: string
+  ID?: string
+  Name?: string
+  ApplyTax?: boolean
+  ApplyShipping?: boolean
+  MinQuantity?: number
+  MaxQuantity?: number | null
+  UseCumulativeQuantity?: boolean
+  RestrictedQuantity?: boolean
+  PriceBreaks?: PriceBreak[]
+  Currency?: string | null
+  SaleStart?: string | null
+  SaleEnd?: string | null
+  IsOnSale?: boolean
+  xp?: null
 }
 
 interface Inventory {
@@ -90,7 +90,7 @@ interface ProductXP {
 }
 
 export interface ChetakProduct {
-  PriceSchedule: PriceSchedule
+  PriceSchedule?: PriceSchedule
   ID: string
   ParentID: string | null
   IsParent: boolean
@@ -110,13 +110,14 @@ export interface ChetakProduct {
   DefaultSupplierID: string | null
   AllSuppliersCanSell: boolean
   Returnable: boolean
-  DateCreated: string
+  DateCreated?: string
   xp?: ProductXP
 }
 
 const Header: FunctionComponent<HeaderProps> = ({ onTestRideClick }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isExploreDropdownOpen, setIsExploreDropdownOpen] = useState(false)
+  const exploreRef = useRef<HTMLLIElement>(null)
   const { OcProductList } = useOcSelector((s) => {
     const ids = s.ocProductCache.ids || []
     const entities = s.ocProductCache.entities || {}
@@ -141,6 +142,21 @@ const Header: FunctionComponent<HeaderProps> = ({ onTestRideClick }) => {
     }
   }, [isMenuOpen])
 
+  // Add click outside handler for explore dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (exploreRef.current && !exploreRef.current.contains(event.target as Node)) {
+        setIsExploreDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
@@ -149,30 +165,10 @@ const Header: FunctionComponent<HeaderProps> = ({ onTestRideClick }) => {
     setIsExploreDropdownOpen(!isExploreDropdownOpen)
   }
 
-  // Close explore dropdown when clicking outside
-  //   useEffect(() => {
-  //     const handleOutsideClick = (event: MouseEvent) => {
-  //       const dropdownElement = document.getElementById('explore-dropdown')
-  //       if (dropdownElement && !dropdownElement.contains(event.target as Node)) {
-  //         closeExploreDropdown()
-  //       }
-  //     }
-
-  //     if (isExploreDropdownOpen) {
-  //       document.addEventListener('click', handleOutsideClick)
-  //     } else {
-  //       document.removeEventListener('click', handleOutsideClick)
-  //     }
-
-  //     return () => {
-  //       document.removeEventListener('click', handleOutsideClick)
-  //     }
-  //   }, [isExploreDropdownOpen])
-
   return (
     <div className="relative" id="header">
       <header
-        className={`header py-3 rounded-b-lg absolute top-0 w-full z-50 backdrop-blur-2xl relative`}
+        className={` py-3 rounded-b-lg absolute top-0 w-full z-50 bg-transparent backdrop-blur-2xl relative`}
       >
         <div className="header__wrapper flex items-center justify-between   px-4">
           <Link href="/">
@@ -189,21 +185,23 @@ const Header: FunctionComponent<HeaderProps> = ({ onTestRideClick }) => {
           <div className="flex items-center gap-4">
             {/* Desktop Buttons */}
             <ul className="hidden lg:flex gap-4">
-              <li
-                className="flex items-center gap-2 py-2 px-8 border border-[#fff] text-[#fff] rounded-3xl hover:bg-[#fff] hover:text-[#322b54] hover:delay-10"
-                onClick={toggleExploreDropdown}
-              >
-                <div className="flex text-[#055160] font-semibold items-center gap-1">
-                  Explore{' '}
-                  <ChevronDown
-                    size={20}
-                    className={`${isExploreDropdownOpen ? 'rotate-180' : ''}`}
-                  />
+              <li className="" ref={exploreRef}>
+                <div
+                  className="flex items-center gap-2 py-2 px-8 border border-[#fff] text-[#fff] rounded-3xl hover:bg-[#fff] hover:text-[#322b54] hover:delay-10 cursor-pointer"
+                  onClick={toggleExploreDropdown}
+                >
+                  <div className="flex text-[#055160] font-semibold items-center gap-1">
+                    Explore{' '}
+                    <ChevronDown
+                      size={20}
+                      className={`${isExploreDropdownOpen ? 'rotate-180' : ''}`}
+                    />
+                  </div>
                 </div>
                 {isExploreDropdownOpen && (
                   <div
                     id="explore-dropdown"
-                    className="absolute px-12 top-full w-fit left-auto right-0  bg-white shadow-lg rounded-b-lg z-40 py-4 w-fit"
+                    className="absolute px-12 top-full w-fit left-auto right-0 bg-white shadow-lg rounded-b-lg z-40 py-4 w-fit"
                   >
                     <div className="px-4 flex justify-end">
                       {/* Group products by a conceptual series (based on ID prefix) */}
@@ -226,6 +224,9 @@ const Header: FunctionComponent<HeaderProps> = ({ onTestRideClick }) => {
                             <Link
                               href={'/Chetak_Series_35'}
                               className="text-lg flex flex-col items-center  mb-2"
+                              onClick={() => {
+                                setIsExploreDropdownOpen(false)
+                              }}
                             >
                               <span className="text-[#322b54]">Series </span>
                               <span className="text-[#0dcaf0] text-3xl italic font-bold">
@@ -238,6 +239,9 @@ const Header: FunctionComponent<HeaderProps> = ({ onTestRideClick }) => {
                                   href={`/Chetak_Series_35/${product?.ID}`}
                                   key={product.ID}
                                   className="flex flex-col items-center gap-2 relative group"
+                                  onClick={() => {
+                                    setIsExploreDropdownOpen(false)
+                                  }}
                                 >
                                   {/* Placeholder for image - replace with actual image component/logic */}
                                   <div className="">
@@ -275,13 +279,14 @@ const Header: FunctionComponent<HeaderProps> = ({ onTestRideClick }) => {
             </ul>
 
             {/* Mobile Menu Button */}
+
             <button
               onClick={toggleMenu}
-              className="lg:hidden text-white text-2xl rotate-90 "
+              className="lg:hidden text-2xl  "
               aria-label="Toggle menu"
               key={isMenuOpen ? 'close' : 'open'}
             >
-              |||
+              {!isMenuOpen ? <Menu /> : <X />}
             </button>
           </div>
         </div>
@@ -296,13 +301,6 @@ const Header: FunctionComponent<HeaderProps> = ({ onTestRideClick }) => {
         } lg:hidden`}
       >
         <div className="relative h-full">
-          <button
-            onClick={toggleMenu}
-            className="absolute top-4 right-4 text-gray-800 text-2xl"
-            aria-label="Close menu"
-          >
-            X
-          </button>
           <div className="flex flex-col items-center justify-center h-full space-y-8">
             <div className="flex flex-col gap-4 items-center w-full px-4">
               <button
