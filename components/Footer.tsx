@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import ImageHelper from '../helper/Image'
 import { useOcSelector } from '../ordercloud/redux/ocStore'
 import { ChetakProduct } from './Header'
+import Link from 'next/link'
 
 // Define data for navigation links
 
@@ -96,12 +97,15 @@ const Footer = () => {
         {/* Desktop View */}
         <div className="hidden md:flex justify-between mb-8">
           <div className="flex flex-col gap-10">
-            {/* Logo */}
-            <ImageHelper
-              url="https://www.chetak.com/series-35/-/media/9714a43b927b4784a532ce89b4795591.ashx"
-              alt="Chetak Logo"
-              className="max-w-[285px]"
-            />
+            <Link href={'/'}>
+              <div>
+                <ImageHelper
+                  url="https://www.chetak.com/series-35/-/media/9714a43b927b4784a532ce89b4795591.ashx?h=22&w=170"
+                  alt="Chetak.com"
+                  className="max-w-[285px]"
+                />
+              </div>
+            </Link>
             {/* Contact Info */}
             <div className="flex flex-col gap-4 mt-4 text-sm text-gray-300">
               <p className="flex items-center">
@@ -138,11 +142,15 @@ const Footer = () => {
         <div className="flex flex-col md:hidden">
           <div className="flex flex-col items-center mb-8 ">
             {/* Logo */}
-            <ImageHelper
-              url="https://www.chetak.com/series-35/-/media/9714a43b927b4784a532ce89b4795591.ashx?h=22&w=170"
-              alt="Chetak Logo"
-              className="max-w-[285px]"
-            />
+            <Link href={'/'}>
+              <div>
+                <ImageHelper
+                  url="https://www.chetak.com/series-35/-/media/9714a43b927b4784a532ce89b4795591.ashx?h=22&w=170"
+                  alt="Chetak.com"
+                  className="max-w-[285px]"
+                />
+              </div>
+            </Link>
             {/* Contact Info */}
             <div className="mt-4 text-sm text-gray-300 text-center">
               <p className="flex items-center justify-center">
