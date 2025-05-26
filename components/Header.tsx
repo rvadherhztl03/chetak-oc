@@ -272,7 +272,7 @@ const Header: FunctionComponent<HeaderProps> = ({ onTestRideClick }) => {
               </li>
               <Link
                 href={'/booking'}
-                className="font-semibold py-2 px-8 rounded-3xl text-[#322b54] bg-[#47bcc8] cursor-pointer"
+                className="font-semibold py-2 px-8 rounded-3xl text-[#322b54] bg-gradient-to-b from-[#95e9f1] to-[#47bcc8] cursor-pointer"
               >
                 Book Now
               </Link>
@@ -321,7 +321,7 @@ const Header: FunctionComponent<HeaderProps> = ({ onTestRideClick }) => {
               </button>
               <button
                 type="button"
-                className="w-full py-3 px-8 rounded-3xl text-white bg-[#47bcc8] hover:bg-[#3da8b4] transition"
+                className="w-full py-3 px-8 rounded-3xl text-white bg-gradient-to-b from-[#95e9f1] to-[#47bcc8] hover:bg-[#3da8b4] transition"
               >
                 Book Now
               </button>
