@@ -171,7 +171,7 @@ const Header: FunctionComponent<HeaderProps> = ({ onTestRideClick }) => {
         className={` py-3 rounded-b-lg absolute top-0 w-full z-50 bg-transparent backdrop-blur-2xl relative`}
       >
         <div className="header__wrapper flex items-center justify-between   px-4">
-          <Link href="/">
+          <Link href="/" onClick={() => setIsMenuOpen(false)}>
             <div>
               <ImageHelper
                 url="https://cdn.bajajauto.com/-/media/images/chetakv2/chetak-logo.gif"
@@ -301,17 +301,61 @@ const Header: FunctionComponent<HeaderProps> = ({ onTestRideClick }) => {
         } lg:hidden`}
       >
         <div className="relative h-full">
-          <div className="flex flex-col items-center justify-center h-full space-y-8">
-            <div className="flex flex-col gap-4 items-center w-full px-4">
-              <button
-                type="button"
-                className="w-full flex items-center justify-center gap-2 py-3 px-8 rounded-3xl text-gray-800 border border-gray-800 hover:bg-gray-800 hover:text-white transition"
+          <div className="flex flex-col h-full space-y-12 pt-32">
+            <div className="w-full flex flex-col gap-4 items-center w-full px-4">
+              <div
+                id="explore-dropdown"
+                className=" w-full bg-white shadow-lg rounded-b-lg z-40 py-4"
               >
-                Explore <ChevronDown size={20} />
-              </button>
+                <div className="px-4 flex ">
+                  {/* Group products by a conceptual series (based on ID prefix) */}
+                  {Array.isArray(OcProductList) &&
+                    Object.entries(
+                      OcProductList.reduce(
+                        (acc: Record<string, ChetakProduct[]>, product: ChetakProduct) => {
+                          const seriesPrefix = product.ID?.split('_')[1]?.substring(0, 2) || 'Other'
+                          if (!acc[seriesPrefix]) {
+                            acc[seriesPrefix] = []
+                          }
+                          acc[seriesPrefix].push(product)
+                          return acc
+                        },
+                        {}
+                      )
+                    ).map(([series, products]) => (
+                      <div key={series} className="flex flex-col gap-6 p-4">
+                        <Link
+                          href={'/Chetak_Series_35'}
+                          className="text-lg flex items-center gap-2 mb-2"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          <span className="text-[#322b54]">Series </span>
+                          <span className="text-[#0dcaf0] text-3xl italic font-bold">{series}</span>
+                        </Link>
+                        <div className="flex gap-5">
+                          {products.map((product) => (
+                            <Link
+                              href={`/Chetak_Series_35/${product?.ID}`}
+                              key={product.ID}
+                              className="flex flex-col items-center gap-2 relative group"
+                              onClick={() => setIsMenuOpen(false)}
+                            >
+                              {/* Placeholder for image - replace with actual image component/logic */}
+
+                              <div className="relative">
+                                <p className="font-semibold text-[#0dcaf0]">{product.Name}</p>
+                                <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#0dcaf0] transition-all duration-300 ease-in-out group-hover:w-full"></div>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
               <button
                 type="button"
-                className="w-full py-3 px-8 rounded-3xl text-white bg-[#47bcc8] hover:bg-[#3da8b4] transition"
+                className="w-full py-3 px-8 rounded-3xl font-semibold text-[#322b54] bg-gradient-to-b from-[#95e9f1] to-[#47bcc8] transition"
                 onClick={() => {
                   onTestRideClick()
                   toggleMenu()
@@ -319,12 +363,13 @@ const Header: FunctionComponent<HeaderProps> = ({ onTestRideClick }) => {
               >
                 Test Ride
               </button>
-              <button
-                type="button"
-                className="w-full py-3 px-8 rounded-3xl text-white bg-gradient-to-b from-[#95e9f1] to-[#47bcc8] hover:bg-[#3da8b4] transition"
+              <Link
+                href={'/booking'}
+                onClick={() => setIsMenuOpen(false)}
+                className="font-semibold w-full flex justify-center py-2 px-8 rounded-3xl text-[#322b54] bg-gradient-to-b from-[#95e9f1] to-[#47bcc8] cursor-pointer"
               >
                 Book Now
-              </button>
+              </Link>
             </div>
           </div>
         </div>

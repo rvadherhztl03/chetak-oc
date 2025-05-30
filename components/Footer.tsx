@@ -95,7 +95,7 @@ const Footer = () => {
     <section className="bg-[#322b54] text-white py-8 px-4 mt-auto w-full">
       <div className="container mx-auto">
         {/* Desktop View */}
-        <div className="hidden md:flex justify-between mb-8">
+        <div className="hidden lg:flex justify-between mb-8">
           <div className="flex flex-col gap-10">
             <Link href={'/'}>
               <div>
@@ -139,7 +139,7 @@ const Footer = () => {
         </div>
 
         {/* Mobile View */}
-        <div className="flex flex-col md:hidden">
+        <div className="flex flex-col lg:hidden">
           <div className="flex flex-col items-center mb-8 ">
             {/* Logo */}
             <Link href={'/'}>
