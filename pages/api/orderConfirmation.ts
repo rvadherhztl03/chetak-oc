@@ -4,13 +4,13 @@ import axios from 'axios'
 type ResponseData = {
   success: boolean
 }
-export default function handler(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
   const body = req.body
   const orderId: string = body?.RouteParams?.orderID
   const octoken: string = body?.AnonUserToken
   let result: boolean = false
 
-  axios.post('https://webhook.site/39c63458-f6c4-43ef-8ed7-fd71e556f341', req.body);
+ await axios.post('https://webhook.site/39c63458-f6c4-43ef-8ed7-fd71e556f341', req.body);
 
 
   if (orderId && octoken && process.env.NEXT_PUBLIC_ET_CLIENTSECRET) {
@@ -21,7 +21,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Respon
     )
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let worksheet: any = undefined
-    axios
+    await axios
       .get(`${process.env.NEXT_PUBLIC_OC_BASE_API_URL}/v1/orders/All/${orderId}/worksheet`, {
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Respon
           worksheet = response.data
           if (worksheet) {
             console.log(`Worksheet found ${orderId}`)
-            axios
+             axios
               .post('https://mcyl0bsfb6nnjg5v3n6gbh9v6gc0.auth.marketingcloudapis.com/v2/token', {
                 grant_type: 'client_credentials',
                 client_id: 'lf5r1l4pmw47mabwh3qmk6gq',
