@@ -61,7 +61,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function SendBookingConfirmationEmail(worksheet: any, sfmctoken: string) {
+function SendBookingConfirmationEmail(worksheet: any, sfmctoken: string) {
   if (sfmctoken) {
     console.log(`SendBookingConfirmationEmail`)
     const vehicle = worksheet.LineItems[0]
