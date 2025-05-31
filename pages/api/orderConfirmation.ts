@@ -9,6 +9,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   const orderId: string = body?.RouteParams?.orderID
   const octoken: string = body?.AnonUserToken
   let result: boolean = false
+
+  console.log(
+    `${orderId}|${octoken?.slice(-5)}|${
+      process.env?.NEXT_PUBLIC_OC_BASE_API_URL
+    }|${process.env?.NEXT_PUBLIC_ET_CLIENTSECRET?.slice(-5)}`
+  )
   if (orderId && octoken && process.env.NEXT_PUBLIC_ET_CLIENTSECRET) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let worksheet: any = undefined
@@ -23,6 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         if (response?.status == 200 && response.data) {
           worksheet = response.data
           if (worksheet) {
+            console.log(`Worksheet found ${orderId}`)
             axios
               .post('https://mcyl0bsfb6nnjg5v3n6gbh9v6gc0.auth.marketingcloudapis.com/v2/token', {
                 grant_type: 'client_credentials',
@@ -32,6 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
               })
               //.then((response) => console.log(response))
               .then((response) => {
+                ;`sfmc token response ${response?.status}`
                 if (response?.status == 200) {
                   SendBookingConfirmationEmail(worksheet, response?.data?.access_token)
                   result = true
@@ -41,8 +49,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           } else {
             console.log(`Worksheet null ${orderId}`)
           }
+        } else {
+          console.log(`Worksheet response ${response?.status} | ${response.data}`)
         }
       })
+      .then((error) => console.log(error))
   } else {
     console.log('Payload has missing order data')
   }
