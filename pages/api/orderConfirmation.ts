@@ -1,7 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import axios from 'axios'
-import { IntegrationEvents, OrderWorksheet } from 'ordercloud-javascript-sdk'
-import { OrderWithXp, OrderWorksheetWithXP } from '../../ordercloud/redux/xp'
 
 type ResponseData = {
   success: boolean
@@ -12,6 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   const octoken: string = body?.AnonUserToken
   let result: boolean = false
   if (orderId && octoken && process.env.NEXT_ET_CLIENTSECRET) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let worksheet: any = undefined
     axios
       .get(`${process.env.NEXT_PUBLIC_OC_BASE_API_URL}/v1/orders/All/${orderId}/worksheet`, {
@@ -50,9 +49,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   res.status(200).json({ success: result })
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function SendBookingConfirmationEmail(worksheet: any, sfmctoken: string) {
   if (sfmctoken) {
-    console.log(`SendBookingConfirmationEmail`);
+    console.log(`SendBookingConfirmationEmail`)
     const vehicle = worksheet.LineItems[0]
     const name = vehicle.xp.name.split(' ')
     axios
@@ -80,7 +80,6 @@ async function SendBookingConfirmationEmail(worksheet: any, sfmctoken: string) {
         }
       )
       .then((response) => {
-       
         if (response?.status == 201) {
           console.log(response.data)
         }
