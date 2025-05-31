@@ -115,7 +115,7 @@ export const createLineItem = createOcAsyncThunk<RequiredDeep<OrderWorksheet>, L
 
     // initialize the order if it doesn't exist already
     if (!orderId) {
-      const orderResponse = await Orders.Create('Outgoing', {})
+      const orderResponse = await Orders.Create('Outgoing', {ID: `B${new Date().getTime()}`})
       orderId = orderResponse.ID
     }
 
