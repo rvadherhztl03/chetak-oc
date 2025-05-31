@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   const orderId: string = body?.RouteParams?.orderID
   const octoken: string = body?.AnonUserToken
   let result: boolean = false
-  if (orderId && octoken && process.env.NEXT_ET_CLIENTSECRET) {
+  if (orderId && octoken && process.env.NEXT_PUBLIC_ET_CLIENTSECRET) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let worksheet: any = undefined
     axios
@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
               .post('https://mcyl0bsfb6nnjg5v3n6gbh9v6gc0.auth.marketingcloudapis.com/v2/token', {
                 grant_type: 'client_credentials',
                 client_id: 'lf5r1l4pmw47mabwh3qmk6gq',
-                client_secret: process.env.NEXT_ET_CLIENTSECRET,
+                client_secret: process.env.NEXT_PUBLIC_ET_CLIENTSECRET,
                 account_id: '100016735',
               })
               //.then((response) => console.log(response))
