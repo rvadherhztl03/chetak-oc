@@ -39,7 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
               })
               //.then((response) => console.log(response))
               .then((response) => {
-                ;`sfmc token response ${response?.status}`
+                console.log(`sfmc token response ${response?.status}`)
                 if (response?.status == 200) {
                   SendBookingConfirmationEmail(worksheet, response?.data?.access_token)
                   result = true
