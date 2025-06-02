@@ -26,16 +26,20 @@ export interface RecentOrder {
 
 export interface OcCurrentOrderState {
   initialized: boolean
+  loading?: boolean
   order?: RequiredDeep<Order>
   lineItems?: RequiredDeep<LineItem>[]
   payments?: RequiredDeep<Payment>[]
   shipEstimateResponse?: RequiredDeep<ShipEstimateResponse>
   recentOrders: RecentOrder[]
+  allOrders?: OrderWorksheet[]
 }
 
 const initialState: OcCurrentOrderState = {
   initialized: false,
+  loading: false,
   recentOrders: [],
+  allOrders: [],
 }
 
 export const removeAllPayments = createOcAsyncThunk<undefined, undefined>(
@@ -86,6 +90,22 @@ export const retrieveOrder = createOcAsyncThunk<RequiredDeep<OrderWorksheet> | u
   }
 )
 
+export const retrieveAllOrders = createOcAsyncThunk<
+  RequiredDeep<OrderWorksheet>[] | undefined,
+  string
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+>('ocCurrentOrder/retrieveAllOrders', async (email, _re) => {
+  try {
+    const response = await fetch(`/api/retrieveOrder?email=${email}`)
+    const data = await response.json()
+
+    return data
+  } catch (error) {
+    console.error('Error fetching orders:', error)
+    return undefined
+  }
+})
+
 export const deleteCurrentOrder = createOcAsyncThunk<void, void>(
   'ocCurrentOrder/delete',
   async (_, ThunkAPI) => {
@@ -115,7 +135,7 @@ export const createLineItem = createOcAsyncThunk<RequiredDeep<OrderWorksheet>, L
 
     // initialize the order if it doesn't exist already
     if (!orderId) {
-      const orderResponse = await Orders.Create('Outgoing', {ID: `B${new Date().getTime()}`})
+      const orderResponse = await Orders.Create('Outgoing', {})
       orderId = orderResponse.ID
     }
 
@@ -262,6 +282,9 @@ export const submitOrder = createOcAsyncThunk<RecentOrder, any>(
   async (onSubmitted, ThunkAPI) => {
     const { ocCurrentOrder } = ThunkAPI.getState()
     const submitResponse = await Orders.Submit('Outgoing', ocCurrentOrder.order.ID)
+    await Orders.Patch('Outgoing', ocCurrentOrder.order.ID, {
+      xp: { email: ocCurrentOrder?.lineItems?.[0]?.xp?.email },
+    })
     // eslint-disable-next-line no-use-before-define
     ThunkAPI.dispatch(clearCurrentOrder())
     return {
@@ -294,6 +317,17 @@ const ocCurrentOrderSlice = createSlice({
         state.order = action.payload.Order
         state.lineItems = action.payload.LineItems
         state.shipEstimateResponse = action.payload.ShipEstimateResponse
+      }
+    })
+    builder.addCase(retrieveAllOrders.pending, (state) => {
+      state.initialized = true
+      state.loading = true
+    })
+
+    builder.addCase(retrieveAllOrders.fulfilled, (state, action) => {
+      state.loading = false
+      if (action.payload) {
+        state.allOrders = action.payload
       }
     })
     builder.addCase(createLineItem.fulfilled, (state, action) => {

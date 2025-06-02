@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import ImageHelper from '../helper/Image'
 import { FunctionComponent, useState, useEffect, useRef } from 'react'
-import { ChevronDown, Menu, X } from 'lucide-react'
+import { ChevronDown, Menu, User, X } from 'lucide-react'
 import { useOcSelector } from '../ordercloud/redux/ocStore'
 
 interface HeaderProps {
@@ -276,6 +276,12 @@ const Header: FunctionComponent<HeaderProps> = ({ onTestRideClick }) => {
               >
                 Book Now
               </Link>
+              <Link
+                href={'/myOrders'}
+                className="font-semibold flex gap-2 py-2 px-8 rounded-3xl text-[#322b54] bg-gradient-to-b from-[#95e9f1] to-[#47bcc8] cursor-pointer"
+              >
+                My Orders <User size={24} />
+              </Link>
             </ul>
 
             {/* Mobile Menu Button */}
@@ -366,9 +372,18 @@ const Header: FunctionComponent<HeaderProps> = ({ onTestRideClick }) => {
               <Link
                 href={'/booking'}
                 onClick={() => setIsMenuOpen(false)}
-                className="font-semibold w-full flex justify-center py-2 px-8 rounded-3xl text-[#322b54] bg-gradient-to-b from-[#95e9f1] to-[#47bcc8] cursor-pointer"
+                className="font-semibold w-full flex justify-center py-3 px-8 rounded-3xl text-[#322b54] bg-gradient-to-b from-[#95e9f1] to-[#47bcc8] cursor-pointer"
               >
                 Book Now
+              </Link>
+              <Link
+                href={'/myOrders'}
+                onClick={() => {
+                  setIsMenuOpen(false)
+                }}
+                className="font-semibold w-full flex gap-4 justify-center py-3 px-8 rounded-3xl text-[#322b54] bg-gradient-to-b from-[#95e9f1] to-[#47bcc8] cursor-pointer"
+              >
+                My Orders <User size={24} />
               </Link>
             </div>
           </div>
