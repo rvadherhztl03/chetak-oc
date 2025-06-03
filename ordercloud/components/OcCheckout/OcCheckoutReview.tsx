@@ -1,6 +1,6 @@
 import { FunctionComponent, useCallback } from 'react'
 import { OcCheckoutStepProps } from '.'
-import { OcCurrentOrderState, submitOrder } from '../../redux/ocCurrentOrder'
+import { submitOrder } from '../../redux/ocCurrentOrder'
 import { useOcDispatch } from '../../redux/ocStore'
 import OcLineItemList from '../OcLineItemList'
 import OcCheckoutSummary from './OcCheckoutSummary'

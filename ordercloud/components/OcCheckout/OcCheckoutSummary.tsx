@@ -22,7 +22,7 @@ const OcCheckoutSummary: FunctionComponent = () => {
       <tbody>
         <tr>
           <th>Subtotal</th>
-          <td>{formatPrice(order.Subtotal)}</td>
+          <td>₹{2000}</td>
         </tr>
         {order.PromotionDiscount ? (
           <tr>
@@ -40,7 +40,7 @@ const OcCheckoutSummary: FunctionComponent = () => {
         </tr>
         <tr>
           <th>Total</th>
-          <td>{formatPrice(order.Total)}</td>
+          <td>₹{2000}</td>
         </tr>
         {payments &&
           payments.map((p) => (
