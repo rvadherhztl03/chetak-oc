@@ -69,21 +69,33 @@ async function GetSfmcToken() {
 async function SendBookingConfirmationEmail(worksheet: any, sfmctoken: string) {
   const vehicle = worksheet.LineItems[0]
   const name = vehicle.xp.name.split(' ')
+  let model = '3501'
+  let type = 'Chetak'
+  if (vehicle.xp.model) {
+    model = vehicle.xp.model
+  } else if (vehicle?.Product?.Name) {
+    model = vehicle?.Product?.Name.replace('Pulsar', '')
+    type = 'Pulsar'
+  }
+
+  const payload = {
+    email: vehicle.xp.email,
+    firstname: name[0],
+    lastname: name.length > 1 ? name[1] : '',
+    bookingid: worksheet.Order.ID,
+    bookingamount: vehicle.xp.bookingAmount ?? '2000.00',
+    vehicletype: type,
+    vehiclevariant: model.trim(),
+    bookingdate: new Date().toDateString(),
+  }
+
+  //console.log(payload)
   const response = await axios.post(
     'https://mcyl0bsfb6nnjg5v3n6gbh9v6gc0.rest.marketingcloudapis.com/interaction/v1/events',
     {
       ContactKey: 'dkumar@horizontal.com',
       EventDefinitionKey: 'APIEvent-cf204840-2ced-ab8a-a103-4a4bb3f27119',
-      Data: {
-        email: vehicle.xp.email,
-        firstname: name[0],
-        lastname: name.length > 1 ? name[1] : '',
-        bookingid: worksheet.Order.ID,
-        bookingamount: vehicle.xp.bookingAmount ?? '2000.00',
-        vehicletype: 'Chetak',
-        vehiclevariant: vehicle.xp.model ?? '3501',
-        bookingdate: new Date().toDateString(),
-      },
+      Data: payload,
     },
     {
       headers: {
